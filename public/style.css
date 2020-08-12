@@ -1,0 +1,38 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.my {
+  background: #1E2125;
+  display: grid;
+  grid-template-areas: 
+    "info     library"
+    "projects library";
+  height: 100vh;
+}
+
+.my > .my__info,
+.my > .my__projects,
+.my > .my__library {
+  padding: 32px;
+}
+
+.my > .my__info {
+  grid-area: info;
+  color:white;
+  font-size: 5em;
+}
+
+.my > .my__projects {
+  grid-area: projects;
+}
+
+.my > .my__library {
+  grid-area: library;
+  background: white;
+  border-radius: 60px 0 0 60px;
+  border: 2px solid #1E2125;
+}
