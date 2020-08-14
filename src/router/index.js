@@ -1,46 +1,54 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import store from '../store'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import store from "../store";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
+    path: "/",
+    name: "Home",
     component: Home,
-    meta:{
-      requiresLogin:true
-    }
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/About.vue'),
-    meta:{
-      noUser:true
-    }
+    path: "/login",
+    name: "Login",
+    component: () => import("@/views/Login.vue"),
+    meta: {
+      noUser: true,
+    },
   },
-  { 
-    path:'*',
-    redirect:'/'
-  }
-]
+  {
+    path: "*",
+    redirect: "/",
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requiresLogin) && !store.state.Auth.isAuthenticated) next({ name:'Login' })
-  else next()
+  if (
+    to.matched.some((record) => record.meta.requiresLogin) &&
+    !store.state.Auth.isAuthenticated
+  )
+    next({ name: "Login" });
+  else next();
 
-  if(to.meta.noUser && store.state.Auth.currentUser && store.state.Auth.currentUser.roles.includes(1)) next({ name: 'Home'});
-  else next()
-})
+  if (
+    to.meta.noUser &&
+    store.state.Auth.currentUser &&
+    store.state.Auth.currentUser.roles.includes(1)
+  )
+    next({ name: "Home" });
+  else next();
+});
 
-
-export default router
+export default router;

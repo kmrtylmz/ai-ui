@@ -1,4 +1,5 @@
 import HelloWorld from './HelloWorld.vue';
 
 export default HelloWorld;
-export {default as Layout} from './layout';
+export * from './layout';
+export * from './dev';
