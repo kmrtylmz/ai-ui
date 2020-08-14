@@ -1,14 +1,14 @@
 <template>
   <div>
-    {{field}}
+    {{ field }}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Header',
+  name: "Header",
   props: {
-    field: String
-  }
+    field: String,
+  },
 };
 </script>

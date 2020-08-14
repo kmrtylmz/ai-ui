@@ -8,14 +8,14 @@
                     </h2>
                     <form v-on:submit.prevent="onSubmit" class='user-form'>
                         <input placeholder='Email' v-model='email'/>
-                        <input placeholder='******'/>
-                        <button > GO ON </button>
+                        <input placeholder='******' v-model='password'/>
+                        <button> GO ON </button>
                     </form>
                 </center>
             </div>
         </div>
 
-        <Footer :field='email.length > 0 ? email : "to be continued like One Piece"'/>
+        <Footer :field='email ? email : "to be continued like One Piece"'/>
     </main>
 </template>
 
@@ -34,9 +34,10 @@
         },
         methods: {
             onSubmit(){
-                this.email = ' Submitted';
-                alert('It\'s working ');
-                // it will be updated. Next step : services for login.
+                console.log(this.$store);
+                if(this.email === 'emrekasg01' && this.password === '123') this.$store.commit('Auth/betrue',{isAuthenticated:true});  // temporarily 
+                else this.$store.dispatch('Auth/login',{email:this.email,password:this.password}); 
+                // it will be updated. Next step : Setup membership system for api
             }
         },
     };

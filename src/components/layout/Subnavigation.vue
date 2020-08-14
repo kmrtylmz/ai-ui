@@ -1,14 +1,14 @@
 <template>
   <div>
-    {{field}}
+    {{ field }}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'SubNavigation',
+  name: "SubNavigation",
   props: {
     field: String,
-  }
+  },
 };
 </script>
