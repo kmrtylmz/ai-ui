@@ -8,7 +8,7 @@
 export default {
   name: "Footer",
   props: {
-    field: "",
+    field:String,
   },
 };
 </script>

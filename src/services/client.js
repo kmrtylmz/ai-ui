@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { generateApiEndpoint } from '../helpers';
-import appConfig from '../config';
+import axios from "axios";
+import { generateApiEndpoint } from "../helpers";
+import appConfig from "../config";
 
 const { localStorageKeys } = appConfig;
 
@@ -8,7 +8,7 @@ let isRefreshing = false;
 let failedQueue = [];
 
 const processQueue = (error, accessToken = null) => {
-  failedQueue.forEach(prom => {
+  failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
     } else {
@@ -20,25 +20,25 @@ const processQueue = (error, accessToken = null) => {
 };
 
 axios.interceptors.request.use(
-  async config => {
+  async (config) => {
     const accessToken = localStorage.getItem(localStorageKeys.accessToken);
 
     // Set necessary headers.
-    if (accessToken) config.headers['Authorization'] = `Bearer ${accessToken}`;
-    config.headers['Client-Id'] = appConfig.clientId;
+    if (accessToken) config.headers["Authorization"] = `Bearer ${accessToken}`;
+    config.headers["Client-Id"] = appConfig.clientId;
 
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   }
 );
 
 axios.interceptors.response.use(
-  async response => {
+  async (response) => {
     return response;
   },
-  async error => {
+  async (error) => {
     const refreshToken = localStorage.getItem(localStorageKeys.refreshToken);
     if (refreshToken) {
       const originalRequest = error.config;
@@ -48,23 +48,23 @@ axios.interceptors.response.use(
           return new Promise((resolve, reject) => {
             failedQueue.push({ resolve, reject });
           })
-            .then(accessToken => {
-              originalRequest.headers['Authorization'] =
-                'Bearer ' + accessToken;
+            .then((accessToken) => {
+              originalRequest.headers["Authorization"] =
+                "Bearer " + accessToken;
               return axios(originalRequest);
             })
-            .catch(err => {
+            .catch((err) => {
               return err;
             });
         }
 
         originalRequest._retry = true;
         isRefreshing = true;
-        const endpoint = generateApiEndpoint('auth/refresh');
+        const endpoint = generateApiEndpoint("auth/refresh");
         return new Promise((resolve, reject) => {
           axios
             .post(endpoint, { refreshToken })
-            .then(result => {
+            .then((result) => {
               localStorage.setItem(
                 localStorageKeys.accessToken,
                 result.data.access_token
@@ -74,15 +74,15 @@ axios.interceptors.response.use(
                 result.data.refresh_token
               );
 
-              axios.defaults.headers.common['Authorization'] =
-                'Bearer ' + result.data.access_token;
-              originalRequest.headers['Authorization'] =
-                'Bearer ' + result.data.access_token;
+              axios.defaults.headers.common["Authorization"] =
+                "Bearer " + result.data.access_token;
+              originalRequest.headers["Authorization"] =
+                "Bearer " + result.data.access_token;
 
               processQueue(null, result.data.access_token);
               resolve(axios(originalRequest));
             })
-            .catch(err => {
+            .catch((err) => {
               processQueue(err, null);
               reject(err);
             })
